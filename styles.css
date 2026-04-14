@@ -5,7 +5,11 @@
 }
 
 :root {
+    --height-botones: 100px;
+    --width-containers: calc(100dvw - 5%);
+
     --color-gris-claro: #aaa;
+    --color-negro: #121212;
 }
 
 body {
@@ -17,12 +21,45 @@ body {
 
 .container-btn {
     display: flex;
-    height: 40px;
+    height: var(--height-botones);
+    width: var(--width-containers);
+
+    justify-content: space-between;
+    align-items: center;
+}
+
+.input {
+    display: flex;
+    height: calc(var(--height-botones) / 2);
+    border: 1px solid var(--color-negro);
+    border-radius: 5px;
+
+    padding-inline: 5px;
+
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+
+    transition: background-color .3s ease;
+}
+
+.input:hover:not(:disabled) {
+    cursor: pointer;
+}
+
+.input:hover:disabled {
+    cursor: no-drop;
+}
+
+.input-archivo:hover {
+background-color: var(--color-gris-claro);
+}
+
+.btn-descargar-excel {
+    background-color: #22aa22;
 }
 
 .container-visualizador {
-    min-height: calc(100dvh - 50px);
-    width: calc(100dvw - 5%);
+    min-height: calc(100dvh - calc(var(--height-botones) + 10px));
+    width: var(--width-containers);
     border: 5px solid var(--color-gris-claro);
     border-radius: 15px;
 }
