@@ -74,6 +74,7 @@ background-color: var(--color-gris-claro);
 .leyenda-arrastrar {
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     font-size: 7rem;
+    text-align: center;
     color: var(--color-gris-claro);
     font-weight: 600;
 }
@@ -103,4 +104,15 @@ background-color: var(--color-gris-claro);
 
 .celda-salida:last-child, .cabecera-celda-salida:last-child {
     border-right: none;
+}
+
+@media screen and (max-width: 700px) {
+    html {
+        font-size: 50%;
+    }
+
+    :root {
+        --height-botones: 50px;
+        --width-containers: calc(100dvw - 15%);
+    }
 }
