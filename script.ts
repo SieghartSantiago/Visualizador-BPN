@@ -1,3 +1,5 @@
+const btnDescargarExcel = document.getElementById('btn-descargar-excel') as HTMLButtonElement
+
 class Parametro {
   private str: string
   private startChar: number
@@ -100,6 +102,8 @@ function actualizarTabla() {
     tabla = tablaTemp
 
     dropZone.appendChild(tabla)
+
+    btnDescargarExcel.disabled = false
   }
 
   for (let i = contTablaIndex; i < contTabla.length; i++) {
@@ -190,3 +194,12 @@ function leerArchivo(file: File) {
 
   reader.readAsText(file)
 }
+
+declare const XLSX: any;
+
+function exportarAExcel(): void {
+  const wb = XLSX.utils.table_to_book(tabla, { sheet: "Hoja1" });
+  XLSX.writeFile(wb, "tabla.xlsx");
+}
+
+btnDescargarExcel.addEventListener('click', exportarAExcel)

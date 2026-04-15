@@ -1,3 +1,4 @@
+const btnDescargarExcel = document.getElementById('btn-descargar-excel');
 class Parametro {
     constructor(str, startChar, length, type) {
         this.str = str;
@@ -72,6 +73,7 @@ function actualizarTabla() {
         tablaTemp.appendChild(cabecera);
         tabla = tablaTemp;
         dropZone.appendChild(tabla);
+        btnDescargarExcel.disabled = false;
     }
     for (let i = contTablaIndex; i < contTabla.length; i++) {
         const charSaltos = [String(...(contTabla[i] || '').matchAll(/\r?\n/g))];
@@ -133,5 +135,10 @@ function leerArchivo(file) {
     };
     reader.readAsText(file);
 }
+function exportarAExcel() {
+    const wb = XLSX.utils.table_to_book(tabla, { sheet: "Hoja1" });
+    XLSX.writeFile(wb, "tabla.xlsx");
+}
+btnDescargarExcel.addEventListener('click', exportarAExcel);
 export {};
 //# sourceMappingURL=script.js.map

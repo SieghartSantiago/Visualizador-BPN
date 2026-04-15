@@ -1,3 +1,6 @@
 script.d.ts
 script.d.ts.map
 script.js.map
+node_modules/
+package-lock.json
+package.json
