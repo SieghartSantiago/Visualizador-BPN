@@ -77,3 +77,30 @@ background-color: var(--color-gris-claro);
     color: var(--color-gris-claro);
     font-weight: 600;
 }
+
+.tabla-salida {
+    min-width: 100%;
+    min-height: 100%;
+
+    font-size: 2rem;
+
+    border-collapse: collapse;
+}
+
+.cabecera-celda-salida {
+    border: 1px solid black;
+    border-top:none
+}
+
+.celda-salida {
+    border: 1px solid black;
+    text-align: center;
+}
+
+.celda-salida:first-child, .cabecera-celda-salida:first-child {
+    border-left: none;
+}
+
+.celda-salida:last-child, .cabecera-celda-salida:last-child {
+    border-right: none;
+}
