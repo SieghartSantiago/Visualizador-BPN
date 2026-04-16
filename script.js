@@ -32,14 +32,12 @@ function actualizarTabla() {
         return;
     if (vars.contTabla.length === 1) {
         vars.dropZone.innerHTML = '';
-        vars.dropZone.classList.remove('centrar-texto');
+        vars.dropZone.classList.remove('flex-center');
         const tablaTemp = document.createElement('table');
-        tablaTemp.classList.add('tabla-salida');
+        tablaTemp.classList.add('table');
         const cabecera = document.createElement('tr');
-        cabecera.classList.add('cabecera-fila-salida');
         for (const parametro of arrParametros) {
             const celda = document.createElement('th');
-            celda.classList.add('cabecera-celda-salida');
             celda.innerText = parametro.getStr;
             cabecera.appendChild(celda);
         }
@@ -52,12 +50,10 @@ function actualizarTabla() {
         const charSaltos = [String(...(vars.contTabla[i] || '').matchAll(/\r?\n/g))];
         const saltos = [...(vars.contTabla[i] || '').matchAll(/\r?\n/g)].map((m) => m.index);
         const fila = document.createElement('tr');
-        fila.classList.add('fila-salida');
         let indexChar = 0;
         let saltosHechos = [];
         for (const parametro of arrParametros) {
             const celda = document.createElement('td');
-            celda.classList.add('celda-salida');
             const saltosHechosNum = saltosHechos.reduce((a, v) => a + v, 0);
             celda.innerText = formatearStr(vars.contTabla[i]
                 ?.slice(parametro.getStartChar - 1 + saltosHechosNum, parametro.getStartChar + parametro.getLength - 1 + saltosHechosNum)

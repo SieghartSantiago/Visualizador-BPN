@@ -1,11 +1,11 @@
 //! ELEMENTOS HTML
 
 const btnDescargarExcel = document.getElementById(
-  'btn-descargar-excel',
+  'btn-download',
 ) as HTMLButtonElement
 const dropZone = document.getElementById('drop-zone') as HTMLDivElement
 const inputArchivo = document.getElementById(
-  'input-archivo',
+  'input-file',
 ) as HTMLInputElement
 
 //! CONSTANTES
