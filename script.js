@@ -8,22 +8,31 @@ function formatearStr(str, type) {
         return '';
     switch (type) {
         case 'string':
-            return str.trim();
+            return str;
         case 'xx/xx/xxxx':
             if (str.length !== 8)
                 return '';
             return `${str.slice(0, 2)}/${str.slice(2, 4)}/${str.slice(4)}`;
         case 'number':
+            return String(Number(str));
+        case 'numbercoma':
             return new Intl.NumberFormat('es-AR', {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
             }).format(Number(str) / 100);
         case '0number':
-            return str.trim();
+            return str;
         case 'xx/xx/xx':
             if (str.length !== 6)
                 return '';
             return `${str.slice(0, 2)}/${str.slice(2, 4)}/${str.slice(4)}`;
+        case 'moneda':
+            switch (str) {
+                case '80':
+                    return 'Pesos';
+                case '82':
+                    return 'Dolares';
+            }
     }
     return '';
 }
