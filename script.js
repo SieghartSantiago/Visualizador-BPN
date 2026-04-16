@@ -1,30 +1,7 @@
-const btnDescargarExcel = document.getElementById('btn-descargar-excel');
-class Parametro {
-    constructor(str, startChar, length, type) {
-        this.str = str;
-        this.startChar = startChar;
-        this.length = length;
-        this.type = type;
-    }
-    get getStr() {
-        return this.str;
-    }
-    get getStartChar() {
-        return this.startChar;
-    }
-    get getLength() {
-        return this.length;
-    }
-    get getType() {
-        return this.type;
-    }
-}
-const arrParametros = [
-    new Parametro('Nombres', 1, 30, 'string'),
-    new Parametro('Apellidos', 31, 30, 'string'),
-    new Parametro('Fecha Nacimiento', 1, 8, 'xx/xx/xxxx'),
-    new Parametro('Importe', 9, 15, 'number'),
-];
+import { arrParametros } from './configuracion.js';
+import * as vars from './variables.js';
+let tabla;
+let contTablaIndex = 0;
 function formatearStr(str, type) {
     str = str.trim();
     if (!str.length)
@@ -50,16 +27,12 @@ function formatearStr(str, type) {
     }
     return '';
 }
-const contTabla = [];
-let contTablaIndex = 0;
-const dropZone = document.getElementById('drop-zone');
-let tabla;
 function actualizarTabla() {
-    if (contTabla.length < 1)
+    if (vars.contTabla.length < 1)
         return;
-    if (contTabla.length === 1) {
-        dropZone.innerHTML = '';
-        dropZone.classList.remove('centrar-texto');
+    if (vars.contTabla.length === 1) {
+        vars.dropZone.innerHTML = '';
+        vars.dropZone.classList.remove('centrar-texto');
         const tablaTemp = document.createElement('table');
         tablaTemp.classList.add('tabla-salida');
         const cabecera = document.createElement('tr');
@@ -72,12 +45,12 @@ function actualizarTabla() {
         }
         tablaTemp.appendChild(cabecera);
         tabla = tablaTemp;
-        dropZone.appendChild(tabla);
-        btnDescargarExcel.disabled = false;
+        vars.dropZone.appendChild(tabla);
+        vars.btnDescargarExcel.disabled = false;
     }
-    for (let i = contTablaIndex; i < contTabla.length; i++) {
-        const charSaltos = [String(...(contTabla[i] || '').matchAll(/\r?\n/g))];
-        const saltos = [...(contTabla[i] || '').matchAll(/\r?\n/g)].map((m) => m.index);
+    for (let i = contTablaIndex; i < vars.contTabla.length; i++) {
+        const charSaltos = [String(...(vars.contTabla[i] || '').matchAll(/\r?\n/g))];
+        const saltos = [...(vars.contTabla[i] || '').matchAll(/\r?\n/g)].map((m) => m.index);
         const fila = document.createElement('tr');
         fila.classList.add('fila-salida');
         let indexChar = 0;
@@ -86,7 +59,7 @@ function actualizarTabla() {
             const celda = document.createElement('td');
             celda.classList.add('celda-salida');
             const saltosHechosNum = saltosHechos.reduce((a, v) => a + v, 0);
-            celda.innerText = formatearStr(contTabla[i]
+            celda.innerText = formatearStr(vars.contTabla[i]
                 ?.slice(parametro.getStartChar - 1 + saltosHechosNum, parametro.getStartChar + parametro.getLength - 1 + saltosHechosNum)
                 .trim() || '', parametro.getType);
             fila.appendChild(celda);
@@ -102,10 +75,22 @@ function actualizarTabla() {
         contTablaIndex++;
     }
 }
-dropZone.addEventListener('dragover', (e) => {
+function leerArchivo(file) {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        vars.contTabla.push(String(e.target?.result));
+        actualizarTabla();
+    };
+    reader.readAsText(file);
+}
+function exportarAExcel() {
+    const wb = XLSX.utils.table_to_book(tabla, { sheet: 'Hoja1' });
+    XLSX.writeFile(wb, 'tabla.xlsx');
+}
+vars.dropZone.addEventListener('dragover', (e) => {
     e.preventDefault();
 });
-dropZone.addEventListener('drop', (e) => {
+vars.dropZone.addEventListener('drop', (e) => {
     e.preventDefault();
     const files = e.dataTransfer?.files;
     if (!files)
@@ -116,9 +101,8 @@ dropZone.addEventListener('drop', (e) => {
         leerArchivo(file);
     }
 });
-const inputArchivo = document.getElementById('input-archivo');
-inputArchivo.addEventListener('input', (e) => {
-    const files = inputArchivo.files;
+vars.inputArchivo.addEventListener('input', (e) => {
+    const files = vars.inputArchivo.files;
     if (!files)
         return;
     for (const file of files) {
@@ -127,18 +111,4 @@ inputArchivo.addEventListener('input', (e) => {
         leerArchivo(file);
     }
 });
-function leerArchivo(file) {
-    const reader = new FileReader();
-    reader.onload = function (e) {
-        contTabla.push(String(e.target?.result));
-        actualizarTabla();
-    };
-    reader.readAsText(file);
-}
-function exportarAExcel() {
-    const wb = XLSX.utils.table_to_book(tabla, { sheet: "Hoja1" });
-    XLSX.writeFile(wb, "tabla.xlsx");
-}
-btnDescargarExcel.addEventListener('click', exportarAExcel);
-export {};
-//# sourceMappingURL=script.js.map
+vars.btnDescargarExcel.addEventListener('click', exportarAExcel);

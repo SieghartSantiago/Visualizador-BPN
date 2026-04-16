@@ -1,41 +1,12 @@
-const btnDescargarExcel = document.getElementById('btn-descargar-excel') as HTMLButtonElement
+import { arrParametros } from './configuracion.js'
+import * as vars from './variables.js'
 
-class Parametro {
-  private str: string
-  private startChar: number
-  private length: number
-  private type: string
+let tabla: HTMLTableElement
+let contTablaIndex: number = 0
 
-  constructor(str: string, startChar: number, length: number, type: string) {
-    this.str = str
-    this.startChar = startChar
-    this.length = length
-    this.type = type
-  }
+declare const XLSX : any
 
-  public get getStr(): string {
-    return this.str
-  }
-
-  public get getStartChar(): number {
-    return this.startChar
-  }
-
-  public get getLength(): number {
-    return this.length
-  }
-
-  public get getType(): string {
-    return this.type
-  }
-}
-
-const arrParametros: Parametro[] = [
-  new Parametro('Nombres', 1, 30, 'string'),
-  new Parametro('Apellidos', 31, 30, 'string'),
-  new Parametro('Fecha Nacimiento', 1, 8, 'xx/xx/xxxx'),
-  new Parametro('Importe', 9, 15, 'number'),
-]
+//! FUNCIONES
 
 function formatearStr(str: string, type: string): string {
   str = str.trim()
@@ -67,19 +38,13 @@ function formatearStr(str: string, type: string): string {
   return ''
 }
 
-const contTabla: string[] = []
-let contTablaIndex: number = 0
+function actualizarTabla(): void {
+  if (vars.contTabla.length < 1) return
 
-const dropZone = document.getElementById('drop-zone') as HTMLDivElement
-
-let tabla: HTMLTableElement
-
-function actualizarTabla() {
-  if (contTabla.length < 1) return
-
-  if (contTabla.length === 1) {
-    dropZone.innerHTML = ''
-    dropZone.classList.remove('centrar-texto')
+  //* Crea tabla
+  if (vars.contTabla.length === 1) {
+    vars.dropZone.innerHTML = ''
+    vars.dropZone.classList.remove('centrar-texto')
 
     const tablaTemp = document.createElement('table')
 
@@ -101,15 +66,16 @@ function actualizarTabla() {
 
     tabla = tablaTemp
 
-    dropZone.appendChild(tabla)
+    vars.dropZone.appendChild(tabla)
 
-    btnDescargarExcel.disabled = false
+    vars.btnDescargarExcel.disabled = false
   }
 
-  for (let i = contTablaIndex; i < contTabla.length; i++) {
-    const charSaltos = [String(...(contTabla[i] || '').matchAll(/\r?\n/g))]
+  //* Agrega archivos añadidos
+  for (let i = contTablaIndex; i < vars.contTabla.length; i++) {
+    const charSaltos = [String(...(vars.contTabla[i] || '').matchAll(/\r?\n/g))]
 
-    const saltos = [...(contTabla[i] || '').matchAll(/\r?\n/g)].map(
+    const saltos = [...(vars.contTabla[i] || '').matchAll(/\r?\n/g)].map(
       (m) => m.index!,
     )
 
@@ -125,7 +91,7 @@ function actualizarTabla() {
       const saltosHechosNum = saltosHechos.reduce((a, v) => a + v, 0)
 
       celda.innerText = formatearStr(
-        contTabla[i]
+        vars.contTabla[i]
           ?.slice(
             parametro.getStartChar - 1 + saltosHechosNum,
             parametro.getStartChar + parametro.getLength - 1 + saltosHechosNum,
@@ -150,11 +116,31 @@ function actualizarTabla() {
   }
 }
 
-dropZone.addEventListener('dragover', (e) => {
+function leerArchivo(file: File) {
+  const reader = new FileReader()
+
+  reader.onload = function (e) {
+    vars.contTabla.push(String(e.target?.result))
+    actualizarTabla()
+  }
+
+  reader.readAsText(file)
+}
+
+//* Exporta a Excel con un CDN
+//? Ver de hacerlo 100% offline
+function exportarAExcel(): void {
+  const wb = XLSX.utils.table_to_book(tabla, { sheet: 'Hoja1' })
+  XLSX.writeFile(wb, 'tabla.xlsx')
+}
+
+//! EVENT LISTENERS
+
+vars.dropZone.addEventListener('dragover', (e) => {
   e.preventDefault()
 })
 
-dropZone.addEventListener('drop', (e) => {
+vars.dropZone.addEventListener('drop', (e) => {
   e.preventDefault()
 
   const files = e.dataTransfer?.files
@@ -168,12 +154,8 @@ dropZone.addEventListener('drop', (e) => {
   }
 })
 
-const inputArchivo = document.getElementById(
-  'input-archivo',
-) as HTMLInputElement
-
-inputArchivo.addEventListener('input', (e) => {
-  const files = inputArchivo.files
+vars.inputArchivo.addEventListener('input', (e) => {
+  const files = vars.inputArchivo.files
 
   if (!files) return
 
@@ -184,22 +166,4 @@ inputArchivo.addEventListener('input', (e) => {
   }
 })
 
-function leerArchivo(file: File) {
-  const reader = new FileReader()
-
-  reader.onload = function (e) {
-    contTabla.push(String(e.target?.result))
-    actualizarTabla()
-  }
-
-  reader.readAsText(file)
-}
-
-declare const XLSX: any;
-
-function exportarAExcel(): void {
-  const wb = XLSX.utils.table_to_book(tabla, { sheet: "Hoja1" });
-  XLSX.writeFile(wb, "tabla.xlsx");
-}
-
-btnDescargarExcel.addEventListener('click', exportarAExcel)
+vars.btnDescargarExcel.addEventListener('click', exportarAExcel)
