@@ -55,7 +55,6 @@ body {
     min-height: calc(100dvh - var(--btn-height) - var(--space-sm));
     border: 5px solid var(--color-muted);
     border-radius: var(--radius-lg);
-    overflow: hidden;
 }
 
 /* =========================
