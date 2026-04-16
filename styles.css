@@ -1,0 +1,158 @@
+:root {
+    /* Layout */
+    --btn-height: 100px;
+    --container-width: 95%;
+
+    /* Colors */
+    --color-bg: #ffffff;
+    --color-text: #121212;
+    --color-border: #000000;
+    --color-muted: #aaaaaa;
+    --color-success: #22aa22;
+
+    /* Radius */
+    --radius-sm: 5px;
+    --radius-lg: 15px;
+
+    /* Spacing */
+    --space-xs: 5px;
+    --space-sm: 10px;
+}
+
+/* =========================
+   RESET
+========================= */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: system-ui, -apple-system, sans-serif;
+    color: var(--color-text);
+}
+
+/* =========================
+   LAYOUT
+========================= */
+.container {
+    width: var(--container-width);
+}
+
+.container--buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-sm);
+    height: var(--btn-height);
+}
+
+.container--viewer {
+    min-height: calc(100dvh - var(--btn-height) - var(--space-sm));
+    border: 5px solid var(--color-muted);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
+/* =========================
+   INPUTS & BUTTONS
+========================= */
+.input {
+    display: flex;
+    align-items: center;
+    height: calc(var(--btn-height) / 2);
+    padding-inline: var(--space-xs);
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+
+    background-color: var(--color-bg);
+    font-family: inherit;
+
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.input:not(:disabled):hover {
+    cursor: pointer;
+    background-color: var(--color-muted);
+}
+
+.input:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.input:focus {
+    outline: 2px solid var(--color-muted);
+    outline-offset: 2px;
+}
+
+.btn {
+    cursor: pointer;
+}
+
+.btn--success {
+    background-color: var(--color-success);
+    color: #fff;
+}
+
+/* =========================
+   TEXT UTILITIES
+========================= */
+.flex-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.text-drag {
+    font-size: clamp(2rem, 5vw, 7rem);
+    text-align: center;
+    color: var(--color-muted);
+    font-weight: 600;
+}
+
+/* =========================
+   TABLE
+========================= */
+.table {
+    width: 100%;
+    height: 100%;
+    border-collapse: collapse;
+    font-size: clamp(1rem, 2vw, 2rem);
+}
+
+.table th,
+.table td {
+    border: 1px solid var(--color-border);
+    text-align: center;
+}
+
+.table th {
+    border-top: none;
+}
+
+.table th:first-child,
+.table td:first-child {
+    border-left: none;
+}
+
+.table th:last-child,
+.table td:last-child {
+    border-right: none;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 700px) {
+    :root {
+        --btn-height: 60px;
+        --container-width: 90%;
+    }
+}

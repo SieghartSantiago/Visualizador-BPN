@@ -4,20 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visor BPN</title>
+
     <link rel="stylesheet" href="styles.css">
-    <script src="script.js" defer></script>
+
+    <script src="./lib/xlsx.full.min.js"></script>
+    <script type="module" src="script.js" defer></script>
 </head>
 <body>
-    <div>
-        <div>
-            Seleccionar archivo <input type="file">
-        </div>
-        <button disabled>
+
+    <!-- CONTROLES -->
+    <div class="container container--buttons">
+        
+        <label for="input-file" class="input flex-center btn">
+            Seleccionar archivo
+        </label>
+
+        <input type="file" id="input-file" hidden multiple>
+
+        <button id="btn-download" class="input flex-center btn btn--success" disabled>
             Descargar Excel
         </button>
+
     </div>
-    <div>
-        Arrastre los archivos acá
+
+    <!-- VISUALIZADOR -->
+    <div class="container container--viewer flex-center" id="drop-zone">
+        <p class="text-drag">Arrastrá los archivos acá</p>
     </div>
+
 </body>
 </html>
