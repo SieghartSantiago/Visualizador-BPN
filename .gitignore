@@ -4,3 +4,9 @@ script.js.map
 node_modules/
 package-lock.json
 package.json
+Parametro.d.ts
+Parametro.d.ts.map
+variables.d.ts
+variables.d.ts.map
+configuracion.d.ts
+configuracion.d.ts.map
